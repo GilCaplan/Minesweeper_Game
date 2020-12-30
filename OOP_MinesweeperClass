@@ -24,9 +24,9 @@ public class TestMine {
 				break;
 			}
 			System.out.println("enter coordinate x between 1-"+width);
-			y= reader.nextInt();
-			System.out.println("enter coordinate y between 1-"+height);
 			x= reader.nextInt();
+			System.out.println("enter coordinate y between 1-"+height);
+			y= reader.nextInt();
 			if(y>0 && y<width+1 && x>0 && x< height+1) {
 				board.setMine(y-1, x-1);
 				if(board.checkMine(y-1,x-1)==false)cnt++;
