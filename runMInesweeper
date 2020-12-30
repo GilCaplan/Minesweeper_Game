@@ -1,44 +1,84 @@
-package Gil_MineSweeper;
+public class Minesweeper {
 
-import java.util.Scanner;
-
-public class TestMine {
-	public static Scanner reader= new Scanner(System.in);
-	public static void main(String[] args) {
-		PlayGame();//run game
+	private int[][] mine;
+	private boolean[][] flags;
+	private int m=2;
+	Minesweeper(int w,int h) {	
+		this.m=(int)((w+h)/3);
+		this.flags=randombom(w,h);
+		this.mine=setMines(w,h);
+		for(int i=0;i<=m;i++) {
+			int x=(int)(Math.random()*(w));
+			int y=(int)(Math.random()*(h));
+			if(!flags[x][y]) {setMine(x,y);}
+		}
+		
 	}
-	public static void PlayGame() {
-		System.out.println("enter width/length ");
-		int width= reader.nextInt();
-		System.out.println("enter height/length ");
-		int height= reader.nextInt();
-		Minesweeper check= new Minesweeper(width,height);
-		boolean winner=false;
-		int cnt=0;int x=0,y=0;
-		while(!winner||x!=-1||y!=-1) {
-			check.print();
-			winner= check.winner(cnt);
-			if(winner) {
-				System.out.println(" we have a winner :P ");
-				System.out.println("" );
-				check.printb();
-				break;
-			}
-			System.out.println("enter coordinate x between 1-"+width);
-			x= reader.nextInt();
-			System.out.println("enter coordinate y between 1-"+height);
-			y= reader.nextInt();
-			if(y>0 && y<width+1 && x>0 && x< height+1) {
-				check.setMine(y-1, x-1);
-				if(check.checkMine(y-1,x-1)==false)cnt++;
-				else if(check.checkMine(y-1, x-1)) {
-					System.out.println(" you have lost:( ");
-					System.out.println("" );
-					check.printb();
-					break;
-				}
+	public int[][] setMines(int w, int h){
+		int[][] m= new int[w][h];
+		for(int i=0;i<flags.length;i++) {
+			for(int j=0;j<flags[0].length;j++) {
+				m[i][j]=9;
 			}
 		}
+		
+		return m;
 	}
-	
+	public boolean[][] randombom(int w,int h) {
+		flags= new boolean[w][h];
+		for(int i=0;i<flags.length;i++) {
+			for(int j=0;j<flags[0].length;j++) {
+				flags[i][j]=false;
+			}
+		}
+		for(int i=0;i<=m;i++) {
+			int x=(int)(Math.random()*(w));
+			int y=(int)(Math.random()*(h));
+			flags[x][y]=true;
+		}
+		return flags;
+	}
+	public boolean checkMine(int x,int y) {
+		if(mine[x][y]==7) {
+			return true;
+		}
+		return false;
+	}
+	public void setMine(int i, int j) {
+		if(flags[i][j]) {mine[i][j]=7;}
+		else {
+			int cnt=0;
+			if(j+1<mine[0].length && flags[i][j+1]==true)cnt++;
+			if(j>0 && flags[i][j-1]==true)cnt++;
+			if(i+1<mine.length && flags[i+1][j]==true)cnt++;
+			if(i>0 && flags[i-1][j]==true)cnt++;
+			if(i+1<flags.length && j+1<flags[0].length && flags[i+1][j+1]) {cnt++;}
+			if(i+1<flags.length && j>0 && flags[i+1][j-1]) {cnt++;}
+			if(i>0 && j+1<flags[0].length && flags[i-1][j+1]) {cnt++;}
+			if(i>0 && j>0 && flags[i-1][j-1]) {cnt++;}
+			mine[i][j]=cnt;
+		}
+	}
+	public void print() {
+		for(int i=0;i<mine.length;i++) {
+			for(int j=0;j<mine[0].length;j++) {
+				System.out.print(mine[i][j] +" | ");
+			}
+			System.out.println("");
+		}
+	}
+	public void printb() {
+		for(int i=0;i<mine.length;i++) {
+			for(int j=0;j<mine[0].length;j++) {
+				System.out.print(flags[i][j] +" | ");
+			}
+			System.out.println("-");
+		}
+	}
+	public boolean winner(int cnt) {
+		if(cnt== mine.length*mine[0].length-this.m-1) {
+			return true;
+		}
+		return false;
+	}
 }
