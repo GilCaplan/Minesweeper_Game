@@ -11,16 +11,16 @@ public class TestMine {
 		int width= reader.nextInt();
 		System.out.println("enter height/length ");
 		int height= reader.nextInt();
-		Minesweeper check= new Minesweeper(width,height);
+		Minesweeper board= new Minesweeper(width,height);
 		boolean winner=false;
 		int cnt=0;int x=0,y=0;
 		while(!winner||x!=-1||y!=-1) {
-			check.print();
-			winner= check.winner(cnt);
+			board.print();
+			winner= board.winner(cnt);
 			if(winner) {
 				System.out.println(" we have a winner :P ");
 				System.out.println("" );
-				check.printb();
+				board.printb();
 				break;
 			}
 			System.out.println("enter coordinate x between 1-"+width);
@@ -28,12 +28,12 @@ public class TestMine {
 			System.out.println("enter coordinate y between 1-"+height);
 			x= reader.nextInt();
 			if(y>0 && y<width+1 && x>0 && x< height+1) {
-				check.setMine(y-1, x-1);
-				if(check.checkMine(y-1,x-1)==false)cnt++;
-				else if(check.checkMine(y-1, x-1)) {
+				board.setMine(y-1, x-1);
+				if(board.checkMine(y-1,x-1)==false)cnt++;
+				else if(board.checkMine(y-1, x-1)) {
 					System.out.println(" you have lost:( ");
 					System.out.println("" );
-					check.printb();
+					board.printb();
 					break;
 				}
 			}
